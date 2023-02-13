@@ -1,0 +1,33 @@
+FROM python:3.10.1-slim-buster
+
+RUN mkdir -p /home/app
+
+RUN addgroup --system app && adduser --system --group app
+
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV ENVIRONMENT prod
+ENV TESTING 0
+ENV PORT 8765
+
+RUN apt-get update \
+  && apt-get -y install netcat gcc postgresql \
+  && apt-get clean
+
+RUN pip install --upgrade pip
+RUN pip install poetry
+COPY pyproject.toml poetry.lock ./
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
+
+COPY . .
+
+RUN chown -R app:app $APP_HOME
+
+USER app
+
+CMD gunicorn --bind 0.0.0.0:$PORT app.main:app -w 1 -k uvicorn.workers.UvicornWorker
