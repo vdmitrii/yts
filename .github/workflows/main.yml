@@ -75,3 +75,46 @@ jobs:
         run: docker exec yts python -m black . --check
       - name: isort
         run: docker exec yts python -m isort . --check-only
+
+  deploy:
+    name: Deploy to server
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    env:
+      HEROKU_APP_NAME: <APP_NAME>
+      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/summarizer
+    steps:
+      - name: Set SSH
+        run: |
+              eval $(ssh-agent -s)
+              echo "$SSH_PRIVATE_KEY" | ssh-add -
+              mkdir -p ~/.ssh
+              chmod 700 ~/.ssh
+              ssh-keyscan $PRODUCTION_SERVER_IP >> ~/.ssh/known_hosts
+              chmod 644 ~/.ssh/known_hosts
+
+      - name: Log in on the server
+        run: |
+              ssh root@"$PRODUCTION_SERVER_IP" "echo $CI_BUILD_TOKEN | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}              
+      - name: Log in to GitHub Packages
+        run: echo ${{ secrets.CR_PAT }} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        env:
+         CR_PAT: ${{ secrets.CR_PAT }}
+      - name: Pull image
+        run: |
+          docker pull ${{ env.IMAGE }}:latest || true    
+      - name: Run container
+        run: |
+          docker run \
+            -d \
+            --name yts \
+            -e PORT=8765 \
+            -e ENVIRONMENT=dev \
+            -e DATABASE_URL=sqlite://sqlite.db \
+            -e DATABASE_TEST_URL=sqlite://sqlite.db \
+            -p 5003:8765 \
+            ${{ env.IMAGE }}:latest
+      - name: Release
+        run: |
+          chmod +x ./release.sh
+          ./release.sh

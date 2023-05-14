@@ -34,4 +34,5 @@ async def put(id: int, payload: SummaryPayloadSchema) -> Union[dict, None]:
 
 async def delete(id: int) -> int:
     summary = await TextSummary.filter(id=id).first().delete()
-    return summary
+    # return summary
+
