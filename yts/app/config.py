@@ -3,8 +3,8 @@ from functools import lru_cache
 
 from pydantic import AnyUrl, BaseSettings
 
-log = logging.getLogger("uvicorn")
 
+log = logging.getLogger("uvicorn")
 
 class Settings(BaseSettings):
     environment: str = "dev"
