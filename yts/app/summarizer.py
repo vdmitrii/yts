@@ -4,7 +4,8 @@
 # from app.models.tortoise import TextSummary
 
 
-# async def generate_summary(summary_id: int, url: str) -> None:
+async def generate_summary(summary_id: int, url: str) -> None:
+    pass
 #     article = Article(url)
 #     article.download()
 #     article.parse()
