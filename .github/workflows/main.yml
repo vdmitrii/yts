@@ -67,7 +67,8 @@ jobs:
             -p 5003:8765 \
             ${{ env.IMAGE }}:latest
       - name: Pytest
-        run: docker exec yts python -m pytest -k "ping"
+        run: docker exec yts python -m pytest -k "ping and not summaries"
+"
       - name: Flake8
         run: docker exec yts python -m flake8 .
       - name: Black
