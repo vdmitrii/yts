@@ -6,6 +6,8 @@
 
 async def generate_summary(summary_id: int, url: str) -> None:
     pass
+
+
 #     article = Article(url)
 #     article.download()
 #     article.parse()
