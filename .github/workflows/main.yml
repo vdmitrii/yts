@@ -6,7 +6,6 @@ env:
   IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]')/summarizer
 
 jobs:
-
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
@@ -18,7 +17,7 @@ jobs:
       - name: Log in to GitHub Packages
         run: echo ${{ secrets.CR_PAT }} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-         CR_PAT: ${{ secrets.CR_PAT }}
+          CR_PAT: ${{ secrets.CR_PAT }}
       - name: Pull image
         run: |
           docker pull ${{ env.IMAGE }}:latest || true
@@ -45,7 +44,7 @@ jobs:
       - name: Log in to GitHub Packages
         run: echo ${{ secrets.CR_PAT }} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-         CR_PAT: ${{ secrets.CR_PAT }}
+          CR_PAT: ${{ secrets.CR_PAT }}
       - name: Pull image
         run: |
           docker pull ${{ env.IMAGE }}:latest || true
@@ -86,23 +85,23 @@ jobs:
     steps:
       - name: Set SSH
         run: |
-              eval $(ssh-agent -s)
-              echo "$SSH_PRIVATE_KEY" | ssh-add -
-              mkdir -p ~/.ssh
-              chmod 700 ~/.ssh
-              ssh-keyscan $PRODUCTION_SERVER_IP >> ~/.ssh/known_hosts
-              chmod 644 ~/.ssh/known_hosts
+          eval $(ssh-agent -s)
+          echo "$SSH_PRIVATE_KEY" | ssh-add -
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan $PRODUCTION_SERVER_IP >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
       - name: Log in on the server
         run: |
-              ssh root@"$PRODUCTION_SERVER_IP" "echo $CI_BUILD_TOKEN | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}              
+          ssh root@"$PRODUCTION_SERVER_IP" "echo $CI_BUILD_TOKEN | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - name: Log in to GitHub Packages
         run: echo ${{ secrets.CR_PAT }} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-         CR_PAT: ${{ secrets.CR_PAT }}
+          CR_PAT: ${{ secrets.CR_PAT }}
       - name: Pull image
         run: |
-          docker pull ${{ env.IMAGE }}:latest || true    
+          docker pull ${{ env.IMAGE }}:latest || true
       - name: Run container
         run: |
           docker run \

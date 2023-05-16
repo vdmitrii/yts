@@ -4,6 +4,7 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, Path
 
 from app.api import crud
 from app.models.tortoise import SummarySchema
+
 # from app.summarizer import generate_summary
 
 from app.models.pydantic import (  # isort:skip
@@ -13,13 +14,15 @@ from app.models.pydantic import (  # isort:skip
 )
 
 router = APIRouter()
+
+
 @router.get("/", response_model=List[SummarySchema])
-async def read_all_summaries() -> List[SummarySchema]: # type: ignore
+async def read_all_summaries() -> List[SummarySchema]:  # type: ignore
     return await crud.get_all()
 
 
 @router.get("/{id}/", response_model=SummarySchema)
-async def read_summary(id: int = Path(..., gt=0)) -> SummarySchema: # type: ignore
+async def read_summary(id: int = Path(..., gt=0)) -> SummarySchema:  # type: ignore
     summary = await crud.get(id)
     if not summary:
         raise HTTPException(status_code=404, detail="Summary not found")
