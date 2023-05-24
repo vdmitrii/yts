@@ -2,7 +2,6 @@ import json
 from datetime import datetime
 
 import pytest
-
 from app.api import crud, summaries
 
 
