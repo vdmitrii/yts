@@ -1,11 +1,21 @@
 version: '3.8'
 
 services:
+  frontend:
+    build:
+      context: ./yts/frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8501:8501
+    depends_on:
+      - backend
+    volumes:
+        - ./yts:/usr/src/app
 
   web:
     build:
       context: ./yts
-      dockerfile: Dockerfile    
+      dockerfile: Dockerfile
     command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     volumes:
       - ./yts:/usr/src/app
