@@ -80,9 +80,6 @@ jobs:
     name: Deploy to server
     runs-on: ubuntu-latest
     needs: [build, test]
-    # env:
-      # HEROKU_APP_NAME: <APP_NAME>
-      # HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/summarizer
     steps:
       - name: Set SSH
         run: |
