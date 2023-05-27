@@ -43,9 +43,9 @@ jobs:
         with:
           ref: main
       - name: Log in to GitHub Packages
-        run: echo ${{ secrets.CR_PAT }} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-         CR_PAT: ${{ secrets.CR_PAT }}
+         GITHUB_TOKEN: ${{ secrets.CR_PAT }}
       - name: Pull image
         run: |
           docker pull ${{ env.IMAGE }}:latest || true
@@ -94,9 +94,9 @@ jobs:
         run: |
               ssh root@"$PRODUCTION_SERVER_IP" "echo $CI_BUILD_TOKEN | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
       - name: Log in to GitHub Packages
-        run: echo ${{ secrets.CR_PAT }} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
+        run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
-         CR_PAT: ${{ secrets.CR_PAT }}
+         GITHUB_TOKEN: ${{ secrets.CR_PAT }}
       - name: Pull image
         run: |
           docker pull ${{ env.IMAGE }}:latest || true

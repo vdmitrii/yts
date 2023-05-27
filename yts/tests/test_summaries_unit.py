@@ -6,8 +6,11 @@ from app.api import crud, summaries
 
 
 def test_create_summary(test_app, monkeypatch):
-    test_request_payload = {"url": "https://foo.bar"}
-    test_response_payload = {"id": 1, "url": "https://foo.bar"}
+    test_request_payload = {"url": "https://www.youtube.com/watch?v=pBk4NYhWNMM"}
+    test_response_payload = {
+        "id": 1,
+        "url": "https://www.youtube.com/watch?v=pBk4NYhWNMM",
+    }
 
     async def mock_post(payload):
         return 1
@@ -18,12 +21,10 @@ def test_create_summary(test_app, monkeypatch):
         return None
 
     monkeypatch.setattr(summaries, "generate_summary", mock_generate_summary)
-
     response = test_app.post(
         "/summaries/",
         data=json.dumps(test_request_payload),
     )
-
     assert response.status_code == 201
     assert response.json() == test_response_payload
 
@@ -215,7 +216,6 @@ def test_update_summary_invalid(
         return None
 
     monkeypatch.setattr(crud, "put", mock_put)
-
     response = test_app.put(f"/summaries/{summary_id}/", data=json.dumps(payload))
     assert response.status_code == status_code
     assert response.json()["detail"] == detail
