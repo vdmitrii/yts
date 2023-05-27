@@ -7,10 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8501:8501
-    depends_on:
-      - backend
     volumes:
-        - ./yts:/usr/src/app
+        - ./yts/frontend:/usr/src/app
 
   web:
     build:

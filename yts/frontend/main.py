@@ -18,10 +18,10 @@ STYLES = {
 st.set_option("deprecation.showfileUploaderEncoding", False)
 
 # defines an h1 header
-st.title("Style transfer web app")
+st.title("Summatizer app for Youtube video")
 
 # displays a file uploader widget
-image = st.file_uploader("Choose an image")
+image = st.file_uploader("Choose an video")
 
 # displays the select widget for the styles
 style = st.selectbox("Choose the style", [i for i in STYLES.keys()])

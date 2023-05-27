@@ -24,7 +24,6 @@ async def read_summary(id: int = Path(..., gt=0)) -> SummarySchema:  # type: ign
     summary = await crud.get(id)
     if not summary:
         raise HTTPException(status_code=404, detail="Summary not found")
-
     return summary
 
 
@@ -33,9 +32,7 @@ async def create_summary(
     payload: SummaryPayloadSchema, background_tasks: BackgroundTasks
 ) -> SummaryResponseSchema:
     summary_id = await crud.post(payload)
-
     background_tasks.add_task(generate_summary, summary_id, payload.url)
-
     response_object = {"id": summary_id, "url": payload.url}
     return response_object
 
@@ -47,7 +44,6 @@ async def update_summary(
     summary = await crud.put(id, payload)
     if not summary:
         raise HTTPException(status_code=404, detail="Summary not found")
-
     return summary
 
 
@@ -56,7 +52,5 @@ async def delete_summary(id: int = Path(..., gt=0)) -> SummaryResponseSchema:
     summary = await crud.get(id)
     if not summary:
         raise HTTPException(status_code=404, detail="Summary not found")
-
     await crud.delete(id)
-
     return summary
