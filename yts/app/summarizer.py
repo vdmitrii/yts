@@ -11,6 +11,7 @@ OPENAI_KEY = os.getenv("OPENAI_KEY")
 openai.api_key = OPENAI_KEY
 
 
+# TODO: add corner cases -> https://www.youtube.com/embed/zUES9s-yNl8
 def get_id(url):
     import re
 
@@ -19,8 +20,9 @@ def get_id(url):
     return res[0]
 
 
+# TODO: process situations then there is no have a subtitles
 def generate_transcript(id):
-    transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en", "ru"])
+    transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
     # transcript = transcript_list.find_transcript(['en'])
     # translated_transcript = transcript.translate('de')
     # print(translated_transcript.fetch())
@@ -58,9 +60,6 @@ def completion_with_backoff(text):
 async def generate_summary(summary_id: int, url: str) -> None:
     yt_id = get_id(url)
     transcript, _ = generate_transcript(yt_id)
-    try:
-        summary = completion_with_backoff(transcript)
-    except Exception as e:
-        print(e)
-    TextSummary.filter(id=summary_id).update(summary=summary)
+    summary = completion_with_backoff(transcript)
+    await TextSummary.filter(id=summary_id).update(summary=summary)
     # return summary

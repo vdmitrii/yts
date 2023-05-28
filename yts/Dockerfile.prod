@@ -1,4 +1,4 @@
-FROM python:3.10.1-slim-buster
+FROM python:3.10.8-slim-buster
 
 RUN mkdir -p /home/app
 
@@ -33,4 +33,4 @@ RUN chown -R app:app $APP_HOME
 
 USER app
 
-CMD gunicorn --bind 0.0.0.0:$PORT app.main:app -w 1 -k uvicorn.workers.UvicornWorker
+CMD gunicorn --bind 0.0.0.0:$PORT app.main:app -k uvicorn.workers.UvicornWorker
