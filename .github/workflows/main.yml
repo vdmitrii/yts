@@ -92,7 +92,7 @@ jobs:
 
       - name: Log in on the server
         run: |
-              ssh root@"$PRODUCTION_SERVER_IP" "echo $CI_BUILD_TOKEN | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
+              ssh root@"$PRODUCTION_SERVER_IP"
       - name: Log in to GitHub Packages
         run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
