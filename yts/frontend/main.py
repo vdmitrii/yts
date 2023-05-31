@@ -27,9 +27,11 @@ if st.button("Get summary"):
         mark_summary = summary.json()["summary"]
         # if not summary:
         #     st.write("No summary found")
-        st.markdown("""---""")
+        st.divider()
+        # st.balloons()
         st.markdown(mark_summary)
         st.markdown("""---""")
+        # st.experimental_rerun()
 
 
 # STYLES = {

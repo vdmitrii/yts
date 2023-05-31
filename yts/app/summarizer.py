@@ -21,6 +21,7 @@ def get_id(url):
 
 
 # TODO: process situations then there is no have a subtitles
+# TODO: add redis to chache
 def generate_transcript(id):
     transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
     # transcript = transcript_list.find_transcript(['en'])
@@ -34,6 +35,7 @@ def generate_transcript(id):
     return script, len(script.split())
 
 
+# TODO : handle the problem with lenth of tokens
 @retry(wait=wait_random_exponential(min=23, max=31), stop=stop_after_attempt(6))
 def completion_with_backoff(text):
     messages = [
