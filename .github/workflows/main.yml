@@ -84,14 +84,14 @@ jobs:
       - name: Set SSH
         run: |
               eval $(ssh-agent -s)
-              echo ${{ secrets.SSH_PRIVATE_KEY }} | ssh-add -
+              echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
               mkdir -p ~/.ssh
               chmod 700 ~/.ssh
               ssh-keyscan ${{ vars.PRODUCTION_SERVER_IP }} >> ~/.ssh/known_hosts
               chmod 644 ~/.ssh/known_hosts
       - name: Log in on the server
         run: |
-              ssh root@"${{ vars.PRODUCTION_SERVER_IP }}"
+              ssh ytvas@"${{ vars.PRODUCTION_SERVER_IP }}"
       - name: Log in to GitHub Packages
         run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
