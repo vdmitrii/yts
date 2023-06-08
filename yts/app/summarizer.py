@@ -1,10 +1,11 @@
 import os
 
 import openai
-from app.models.tortoise import TextSummary
 from dotenv import find_dotenv, load_dotenv
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 from youtube_transcript_api import YouTubeTranscriptApi
+
+from app.models.tortoise import TextSummary
 
 load_dotenv(find_dotenv())
 OPENAI_KEY = os.getenv("OPENAI_KEY")
