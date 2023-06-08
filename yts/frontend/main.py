@@ -1,8 +1,5 @@
-from time import sleep
-
 import requests
 import streamlit as st
-from PIL import Image
 
 # https://discuss.streamlit.io/t/version-0-64-0-deprecation-warning-for-st-file-uploader-decoding/4465
 st.set_option("deprecation.showfileUploaderEncoding", False)
