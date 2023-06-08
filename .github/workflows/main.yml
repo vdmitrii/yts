@@ -111,7 +111,3 @@ jobs:
             -e DATABASE_TEST_URL=sqlite://sqlite.db \
             -p 5003:8765 \
             ${{ env.IMAGE }}:latest
-      # - name: Release
-      #   run: |
-      #     chmod +x ./release.sh
-      #     ./release.sh

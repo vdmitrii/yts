@@ -41,14 +41,17 @@ def completion_with_backoff(text):
     messages = [
         {
             "role": "system",
-            "content": """Your main role is to provide clear and informative summaries of text provided by the user. Return the results in markdown format.""",
+            "content": """Your main role is to provide clear and informative summaries of text
+provided by the user. Return the results in markdown format.""",
         },
         {
             "role": "user",
-            "content": f"""Please create a comprehensive bullet-point summary with a two-level structure for the following text: {text}""",
+            "content": f"""Please create a comprehensive bullet-point summary with a two-level
+structure for the following text: {text}""",
         },
     ]
-    # messages = f"Please create a comprehensive bullet-point summary with a two-level structure for the following text: {text}"
+    # messages = f"Please create a comprehensive bullet-point summary with a
+    # two-level structure for the following text: {text}"
     # content = "To summarize: " + "\n\n" + content # TL;DR"
     res = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
