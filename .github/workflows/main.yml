@@ -91,7 +91,7 @@ jobs:
               chmod 644 ~/.ssh/known_hosts
       - name: Log in on the server
         run: |
-              ssh ytvas@"${{ vars.PRODUCTION_SERVER_IP }}"
+              ssh ytvas@${{ vars.PRODUCTION_SERVER_IP }}
       - name: Log in to GitHub Packages
         run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
         env:
