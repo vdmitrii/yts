@@ -94,7 +94,7 @@ jobs:
         env:
           GITHUB_ACTOR: ${{ secrets.PROD_POSTGRES_HOST }}
           CR_PAT: ${{ secrets.CR_PAT }}
-          IMAGE: ${{ env.IMAGE}}
+          IMAGE: ghcr.io/vdmitrii/yts/summarizer
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
@@ -102,7 +102,9 @@ jobs:
           envs: GITHUB_ACTOR,CR_PAT,IMAGE
           script: |
             echo $CR_PAT | docker login -u $GITHUB_ACTOR --password-stdin ghcr.io
-            docker pull ghcr.io/vdmitrii/yts/summarizer:latest
+            docker pull $IMAGE:latest
+            docker stop yts || true
+            docker rm yts || true
             docker run \
               -d \
               --name yts \
@@ -111,7 +113,7 @@ jobs:
               -e DATABASE_URL=sqlite://sqlite.db \
               -e DATABASE_TEST_URL=sqlite://sqlite.db \
               -p 5003:8765 \
-              docker pull ghcr.io/vdmitrii/yts/summarizer:latest
+              $IMAGE:latest
       # - name: Log in to GitHub Packages
       #   run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
       #   env:
