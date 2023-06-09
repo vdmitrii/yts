@@ -111,7 +111,7 @@ jobs:
               -e DATABASE_URL=sqlite://sqlite.db \
               -e DATABASE_TEST_URL=sqlite://sqlite.db \
               -p 5003:8765 \
-              docker pull ghcr.io/vdmitrii/yts/summarizer:latest
+              ghcr.io/vdmitrii/yts/summarizer:latest
       # - name: Log in to GitHub Packages
       #   run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
       #   env:
