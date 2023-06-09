@@ -96,7 +96,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-                  echo "${{ secrets.CR_PAT }}" | docker login -u "${GITHUB_ACTOR}" --password-stdin ghcr.io
+                  echo "${{ secrets.CR_PAT }}" | docker login -u "${GITHUB_ACTOR}" --password-stdin
                   docker pull "${{ env.IMAGE }}":latest || true
                   docker run \
                     -d \
