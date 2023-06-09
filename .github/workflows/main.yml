@@ -101,6 +101,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: GITHUB_ACTOR,CR_PAT,IMAGE
           script: |
+            echo $IMAGE:latest
             echo $CR_PAT | docker login -u $GITHUB_ACTOR --password-stdin ghcr.io
             docker pull $IMAGE:latest
             docker run \
