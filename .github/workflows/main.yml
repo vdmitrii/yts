@@ -89,6 +89,13 @@ jobs:
               chmod 700 ~/.ssh
               ssh-keyscan $PRODUCTION_SERVER_IP >> ~/.ssh/known_hosts
               chmod 644 ~/.ssh/known_hosts
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: echo date
 
       - name: Log in on the server
         run: |
