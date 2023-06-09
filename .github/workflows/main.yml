@@ -84,11 +84,12 @@ jobs:
       - name: Set SSH
         run: |
               eval $(ssh-agent -s)
-              echo "$SSH_PRIVATE_KEY" | ssh-add -
+              echo ${{ secrets.SSH_PRIVATE_KEY }} | ssh-add -
               mkdir -p ~/.ssh
               chmod 700 ~/.ssh
               ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
               chmod 644 ~/.ssh/known_hosts
+
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
