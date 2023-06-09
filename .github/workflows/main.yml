@@ -102,7 +102,7 @@ jobs:
           envs: GITHUB_ACTOR,CR_PAT,IMAGE
           script: |
             echo $CR_PAT | docker login -u $GITHUB_ACTOR --password-stdin ghcr.io
-            docker pull $IMAGE:latest || true
+            docker pull $IMAGE:latest
             docker run \
               -d \
               --name yts \
