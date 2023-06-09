@@ -101,9 +101,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: GITHUB_ACTOR,CR_PAT,IMAGE
           script: |
-            echo $IMAGE:latest
             echo $CR_PAT | docker login -u $GITHUB_ACTOR --password-stdin ghcr.io
-            docker pull $IMAGE:latest
+            docker pull ghcr.io/vdmitrii/yts/summarizer:latest
             docker run \
               -d \
               --name yts \
@@ -112,7 +111,7 @@ jobs:
               -e DATABASE_URL=sqlite://sqlite.db \
               -e DATABASE_TEST_URL=sqlite://sqlite.db \
               -p 5003:8765 \
-              $IMAGE:latest
+              docker pull ghcr.io/vdmitrii/yts/summarizer:latest
       # - name: Log in to GitHub Packages
       #   run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
       #   env:
