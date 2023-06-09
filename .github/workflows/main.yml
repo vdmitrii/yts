@@ -91,22 +91,27 @@ jobs:
 #               chmod 644 ~/.ssh/known_hosts
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
+        env:
+          GITHUB_ACTOR: ${{ secrets.PROD_POSTGRES_HOST }}
+          CR_PAT: ${{ secrets.CR_PAT }}
+          IMAGE: ${{ env.IMAGE}}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: GITHUB_ACTOR,CR_PAT,IMAGE
           script: |
-                  echo "${{ secrets.CR_PAT }}" | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
-                  docker pull ${{ env.IMAGE }}:latest || true
-                  docker run \
-                    -d \
-                    --name yts \
-                    -e PORT=8765 \
-                    -e ENVIRONMENT=dev \
-                    -e DATABASE_URL=sqlite://sqlite.db \
-                    -e DATABASE_TEST_URL=sqlite://sqlite.db \
-                    -p 5003:8765 \
-                    ${{ env.IMAGE }}:latest
+            echo $CR_PAT | docker login -u $GITHUB_ACTOR --password-stdin ghcr.io
+            docker pull ghcr.io/vdmitrii/yts/summarizer:latest
+            docker run \
+              -d \
+              --name yts \
+              -e PORT=8765 \
+              -e ENVIRONMENT=dev \
+              -e DATABASE_URL=sqlite://sqlite.db \
+              -e DATABASE_TEST_URL=sqlite://sqlite.db \
+              -p 5003:8765 \
+              docker pull ghcr.io/vdmitrii/yts/summarizer:latest
       # - name: Log in to GitHub Packages
       #   run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
       #   env:
