@@ -104,8 +104,8 @@ jobs:
             export GITHUB_ACTOR=$GITHUB_ACTOR
             export CR_PAT=$CR_PAT
             export IMAGE=$IMAGE
-            echo $CR_PAT | docker login -u $GITHUB_ACTOR --password-stdin
-            docker pull $IMAGE:latest || true
+            echo $CR_PAT | docker login -u ${GITHUB_ACTOR} --password-stdin
+            docker pull ${IMAGE}:latest || true
             docker run \
               -d \
               --name yts \
@@ -114,7 +114,7 @@ jobs:
               -e DATABASE_URL=sqlite://sqlite.db \
               -e DATABASE_TEST_URL=sqlite://sqlite.db \
               -p 5003:8765 \
-              $IMAGE:latest
+              ${IMAGE}:latest
       # - name: Log in to GitHub Packages
       #   run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
       #   env:
