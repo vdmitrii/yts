@@ -105,15 +105,16 @@ jobs:
             docker pull $IMAGE:latest
             docker stop yts || true
             docker rm yts || true
-            docker run \
-              -d \
-              --name yts \
-              -e PORT=8765 \
-              -e ENVIRONMENT=dev \
-              -e DATABASE_URL=sqlite://sqlite.db \
-              -e DATABASE_TEST_URL=sqlite://sqlite.db \
-              -p 5003:8765 \
-              $IMAGE:latest
+            docker compose up -d
+      # docker run \
+      #   -d \
+      #   --name yts \
+      #   -e PORT=8765 \
+      #   -e ENVIRONMENT=dev \
+      #   -e DATABASE_URL=sqlite://sqlite.db \
+      #   -e DATABASE_TEST_URL=sqlite://sqlite.db \
+      #   -p 5003:8765 \
+      #   $IMAGE:latest
       # - name: Log in to GitHub Packages
       #   run: echo ${GITHUB_TOKEN} | docker login -u ${GITHUB_ACTOR} --password-stdin ghcr.io
       #   env:
