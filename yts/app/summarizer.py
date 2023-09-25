@@ -1,4 +1,5 @@
 import os
+import re
 
 import openai
 from dotenv import find_dotenv, load_dotenv
@@ -14,18 +15,19 @@ openai.api_key = OPENAI_KEY
 
 # TODO: add corner cases -> https://www.youtube.com/embed/zUES9s-yNl8
 def get_id(url):
-    import re
-
-    pattern = re.compile("v=([A-Za-z0-9]+)")
+    pattern = re.compile(r"(?<=\?v=)\w*")
     res = pattern.findall(url)
     return res[0]
 
 
-# TODO: process situations then there is no have a subtitles
-# TODO: add redis to chache
-def generate_transcript(id):
-    transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
-    # transcript = transcript_list.find_transcript(['en'])
+# TODO: add redis to cache
+def generate_transcript(video_ids):
+    try:
+        transcript_list = YouTubeTranscriptApi.list_transcripts(video_ids)
+    except:
+        return None
+    gen_language = transcript_list.find_transcript(["en", "ru"])
+    transcript = gen_language.fetch(gen_language.language)
     # translated_transcript = transcript.translate('de')
     # print(translated_transcript.fetch())
     script = ""
@@ -51,9 +53,6 @@ provided by the user. Return the results in markdown format.""",
 structure for the following text: {text}""",
         },
     ]
-    # messages = f"Please create a comprehensive bullet-point summary with a
-    # two-level structure for the following text: {text}"
-    # content = "To summarize: " + "\n\n" + content # TL;DR"
     res = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
@@ -66,6 +65,8 @@ structure for the following text: {text}""",
 async def generate_summary(summary_id: int, url: str) -> None:
     yt_id = get_id(url)
     transcript, _ = generate_transcript(yt_id)
+    if transcript is None:
+        return
     summary = completion_with_backoff(transcript)
     await TextSummary.filter(id=summary_id).update(summary=summary)
     # return summary
